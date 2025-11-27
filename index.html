@@ -9,25 +9,44 @@
     :root{
       --sky: #87CEEB;
       --card-bg: rgba(255,255,255,0.03);
+      --overlay-bg: rgba(4,10,18,0.85);
     }
     body{
       background: linear-gradient(180deg,#071428 0%,#081a2b 100%);
       color:#e9f5ff;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
+    .navbar-custom{background: linear-gradient(90deg,var(--sky), #0b3d91);}
+    .navbar-brand{color:#041429;font-weight:700}
     .gallery-title{display:flex;align-items:baseline;justify-content:flex-end;gap:.6rem;margin-bottom:1.5rem}
     .gallery-title h1{margin:0;color:var(--sky);font-weight:700}
-    .card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden}
+    .card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden;cursor:pointer}
     .card img{height:480px;object-fit:cover;width:100%}
     .card-body{padding:1rem}
     .card-title{color:var(--sky);font-weight:700}
     .agent-role{display:block;color:#e6f7ff;opacity:.95;margin-top:.25rem}
     .card:hover{transform:translateY(-6px) scale(1.02);transition:transform .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.6)}
     @media (max-width:576px){.card img{height:360px}}
+    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--overlay-bg);z-index:1080;padding:1.25rem}
+    .overlay-card{background:linear-gradient(180deg,#0b1a2a,#042033);border-radius:12px;max-width:520px;width:100%;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+    .overlay-img{width:100%;height:420px;object-fit:cover;display:block}
+    .overlay-body{padding:1.25rem;color:#e9f5ff}
+    .overlay-title{color:var(--sky);font-weight:700;margin-bottom:.25rem}
+    .overlay-role{color:#dfeffb;margin-bottom:.75rem}
+    .close-btn{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#e9f5ff}
+    @media (max-width:576px){.overlay-img{height:320px}}
   </style>
 </head>
-<body>
-  <main class="container py-5">
+<body id="top">
+  <nav class="navbar navbar-expand-lg navbar-custom shadow">
+    <div class="container-fluid">
+      <a class="navbar-brand ps-3">Edgar's Gallery</a>
+      <div class="d-flex">
+        <a class="btn btn-sm btn-light me-2" href="#top">Home</a>
+      </div>
+    </div>
+  </nav>
+  <main class="container py-5" style="padding-top:5.5rem">
     <div class="row mb-4">
       <div class="col-12 gallery-title">
         <h1>AGENT GALLERY</h1>
@@ -42,11 +61,40 @@
     var names = ["Sage","Neon","Yoru","Sova","Reyna","Skye","Chamber","Iso","Jett","Deadlock","Phoenix","Brimstone"];
     var pics = ["sage.png","neon.png","yoru.jpg","sova.jpg","reyna.png","skye.jpg","chamber.jpg","iso.jpg","jett.png","deadlock.png","phoenix.png","brimstone.jpg"];
     var roles = ["Sentinel","Duelist","Duelist","Initiator","Duelist","Initiator","Sentinel","Duelist","Duelist","Sentinel","Duelist","Controller"];
+    var descriptions = [
+      "The bastion of China, Sage creates safety for herself and her team wherever she goes. Able to revive fallen friends and stave off aggressive pushes, she provides a calm center to a hellish fight.",
+      "Filipino Agent, Neon, surges forward at shocking speeds, discharging bursts of bioelectric radiance as fast as her body generates it. She races ahead to catch enemies off guard, then strikes them down quicker than lightning.",
+      "Japanese native Yoru rips holes straight through reality to infiltrate enemy lines unseen. Using deception and aggression in equal measure, he gets the drop on each target before they know where to look.",
+      "Born from the eternal winter of Russia's tundra, Sova tracks, finds, and eliminates enemies with ruthless efficiency and precision. His custom bow and incredible scouting abilities ensure that even if you run, you cannot hide.",
+      "Forged in the heart of Mexico, Reyna dominates single combat, popping off with each kill she scores. Her capability is only limited by her raw skill, making her highly dependent on performance.",
+      "Hailing from Australia, Skye and her band of beasts trail-blaze the way through hostile territory. With her creations hampering the enemy, and her power to heal others, the team is strongest and safest by Skye's side.",
+      "Well-dressed and well-armed, French weapons designer Chamber expels aggressors with deadly precision. He leverages his custom arsenal to hold the line and pick off enemies from afar, with a contingency built for every plan.",
+      "Chinese fixer for hire Iso goes into a flow state to dismantle the opposition. Reconfiguring ambient energy into bulletproof protection, he advances with focus towards his next duel to the death.",
+      "Representing her home country of South Korea, Jett's agile and evasive fighting style lets her take risks no one else can. She runs circles around every skirmish, cutting enemies before they even know what hit them.",
+      "Norwegian operative Deadlock deploys an array of cutting-edge nanowire to secure the battlefield from even the most lethal assault. No one escapes her vigilant watch, nor survives her unyielding ferocity.",
+      "Hailing from the U.K., Phoenix's star power shines through in his fighting style, igniting the battlefield with flash and flare. Whether he's got backup or not, he'll rush into a fight on his own terms.",
+      "Joining from the U.S.A., Brimstone's orbital arsenal ensures his squad always has the advantage. His ability to deliver utility precisely and from a distance make him an unmatched boots-on-the-ground commander."
+    ];
 
     var myContainer = document.getElementById("cardContainer");
     names.forEach((name, i) => {
-      myContainer.innerHTML += "<div class=\"col-xl-3 col-md-4 col-sm-6 col-12\"><div class=\"card my-3\" id=\"c" + i + "\" onmouseenter=\"addShadow('c" + i + "')\" onmouseleave=\"removeShadow('c" + i + "')\"><img src=\"images/" + pics[i] + "\" class=\"card-img-top\" alt=\"" + name + "\"><div class=\"card-body\"><h5 class=\"card-title mb-1\">" + name + "</h5><p class=\"card-text agent-role\">" + roles[i] + "</p></div></div></div>";
+      myContainer.innerHTML += "<div class=\"col-xl-3 col-md-4 col-sm-6 col-12\"><div class=\"card my-3\" id=\"c" + i + "\" onclick=\"openDetails(" + i + ")\" onmouseenter=\"addShadow('c" + i + "')\" onmouseleave=\"removeShadow('c" + i + "')\"><img src=\"images/" + pics[i] + "\" class=\"card-img-top\" alt=\"" + name + "\"><div class=\"card-body\"><h5 class=\"card-title mb-1\">" + name + "</h5><p class=\"card-text agent-role\">" + roles[i] + "</p></div></div></div>";
     });
+
+    function openDetails(i){
+      var overlay = document.createElement("div");
+      overlay.className = "overlay";
+      overlay.id = "detailOverlay";
+      overlay.innerHTML = "<div class=\"overlay-card\"><img class=\"overlay-img\" src=\"images/" + pics[i] + "\" alt=\"" + names[i] + "\"><div class=\"overlay-body\"><h3 class=\"overlay-title\">" + names[i] + "</h3><div class=\"overlay-role\">" + roles[i] + "</div><p style=\"line-height:1.5\">" + descriptions[i] + "</p><div class=\"d-flex justify-content-end mt-3\"><button class=\"btn close-btn\" onclick=\"closeDetails()\">Close</button></div></div></div>";
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDetails(){
+      var el = document.getElementById("detailOverlay");
+      if(el) el.remove();
+      document.body.style.overflow = "";
+    }
 
     function addShadow(id){document.getElementById(id).classList.add("shadow")}
     function removeShadow(id){document.getElementById(id).classList.remove("shadow")}
