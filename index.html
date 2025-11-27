@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valorant Agents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        :root{--sky:#87CEEB;--accent:#0b3d91;--card-bg:rgba(255,255,255,0.03)}
+        body{background:linear-gradient(180deg,#071428 0%,#081a2b 100%);color:#e9f5ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+        .wrapper{padding:4rem 1rem}
+        .section-title{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1.5rem}
+        .section-title h2{margin:0;font-size:1.75rem;font-weight:700;color:var(--sky)}
+        .section-title span{color:#fff;font-weight:600}
+        .card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden}
+        .card img{height:220px;object-fit:cover}
+        .card-body{padding:1rem}
+        .agent-role{display:block;color:#dfeffb;opacity:.9;font-size:.95rem;margin-top:.25rem}
+        .card:hover{transform:translateY(-6px) scale(1.02);transition:transform .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+        @media (max-width:576px){.card img{height:180px}}
+    </style>
+</head>
+<body>
+    <main class="container wrapper">
+        <div class="row mb-4">
+            <div class="col-12 section-title">
+                <h2>Agents</h2>
+                <span>Gallery</span>
+            </div>
+        </div>
+        <div class="row" id="AgentContainer"></div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        var agents=["Sage","Neon","Yoru","Sova","Reyna","Skye","Chamber","Iso","Jett","Deadlock","Phoenix","Brimstone"];
+        var pics=["sage.png","neon.png","yoru.jpg","sova.jpg","reyna.png","skye.jpg","chamber.jpg","iso.jpg","jett.jpg","deadlock.png","phoenix.jpg","brimstone.jpg"];
+        var roles=["Sentinel","Duelist","Duelist","Initiator","Duelist","Initiator","Sentinel","Duelist","Duelist","Sentinel","Duelist","Controller"];
+        var container=document.getElementById("AgentContainer");
+        agents.forEach(function(name,i){
+            container.innerHTML+=
+            "<div class='col-xl-3 col-md-4 col-sm-6 col-12'>"+
+                "<div class='card my-3' id='a"+i+"' onmouseenter='hoverGrow(\"a"+i+"\")' onmouseleave='hoverShrink(\"a"+i+"\")'>"+
+                    "<img src='images/"+pics[i]+"' class='card-img-top' alt='"+name+"'>"+
+                    "<div class='card-body'>"+
+                        "<h5 class='card-title mb-1'>"+name+"</h5>"+
+                        "<span class='agent-role'>"+roles[i]+"</span>"+
+                    "</div>"+
+                "</div>"+
+            "</div>";
+        });
+        function hoverGrow(id){var el=document.getElementById(id);el.style.transform="scale(1.05)";el.style.transition="transform 0.3s ease"}
+        function hoverShrink(id){var el=document.getElementById(id);el.style.transform="scale(1)";el.style.transition="transform 0.3s ease"}
+    </script>
+</body>
+</html>
